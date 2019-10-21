@@ -10,6 +10,7 @@ const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
+const auth = require('./controllers/authorisation');
 
 const PORT = process.env.PORT || 3030;
 
@@ -31,10 +32,10 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => { res.send("IT'S WORKING") })
 app.post('/signin', signin.authenticate(db, bcrypt))
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
-app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
-app.post('/profile/:id', (req, res) => { profile.handleProfileUpdate(req, res, db) })
-app.put('/image', (req, res) => { image.handleImage(req, res, db) })
-app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
+app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db) })
+app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db) })
+app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db) })
+app.post('/imageurl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(PORT, () => {
   console.log(`app is running on port ${PORT}`);
