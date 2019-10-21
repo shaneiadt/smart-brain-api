@@ -14,9 +14,10 @@ const handleProfileGet = (req, res, db) => {
 const handleProfileUpdate = (req, res, db) => {
   const { id } = req.params;
   const { name, age, pet } = req.body.formInput;
+  console.log({ name, age, pet });
   db('users')
     .where({ id })
-    .update({ name })
+    .update({ name, age, pet })
     .then(response => {
       if (response) {
         res.json('success');
