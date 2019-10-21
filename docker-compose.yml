@@ -15,8 +15,10 @@ services:
       POSTGRES_DB: smart-brain-docker
       POSTGRES_HOST: postgres
       CLARIFAI_API_KEY: 6a077356733146f9af40003ca1cab6d9
+      REDIS_URI: redis://redis:6379
     links:
       - postgres
+      - redis
     ports:
       - "3030:3030"
     volumes:
@@ -32,3 +34,10 @@ services:
     build: ./postgres
     ports:
       - "54320:5432"
+
+  # Redis
+  redis:
+    image: redis
+    container_name: cache
+    ports:
+      - "6379:6379"
